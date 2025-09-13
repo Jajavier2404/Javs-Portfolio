@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern Dark Portfolio Design System */
+
+@layer base {
+  :root {
+    /* Blue & Black Portfolio Colors */
+    --background: 0 0% 3%;
+    --foreground: 0 0% 98%;
+    
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 95%;
+    
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 3%;
+    
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 90%;
+    
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
+    
+    --accent: 220 91% 65%;
+    --accent-foreground: 0 0% 98%;
+    
+    --border: 0 0% 12%;
+    --input: 0 0% 8%;
+    --ring: 220 91% 65%;
+
+    /* Blue Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(220 91% 65%), hsl(210 91% 70%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 6%), hsl(0 0% 3%));
+    --gradient-accent: linear-gradient(90deg, hsl(220 91% 65%) 0%, hsl(210 91% 70%) 100%);
+    
+    /* Blue Shadows */
+    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 40px hsl(220 91% 65% / 0.2);
+    --shadow-intense: 0 20px 40px hsl(0 0% 0% / 0.5);
+    
+    /* Animation */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Custom Button Variants */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-accent to-blue-400 text-white font-medium px-8 py-3 rounded-xl;
+    @apply hover:shadow-glow transition-all duration-300 hover:scale-105;
+  }
+  
+  .btn-outline {
+    @apply border border-accent text-accent bg-transparent px-8 py-3 rounded-xl font-medium;
+    @apply hover:bg-accent hover:text-accent-foreground transition-all duration-300;
+  }
+  
+  /* Card Styles */
+  .card-portfolio {
+    @apply bg-card border border-border rounded-2xl p-6;
+    @apply hover:shadow-soft hover:border-accent/20 transition-all duration-300;
+    @apply hover:-translate-y-1;
+  }
+  
+  /* Text Styles */
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent to-blue-400 bg-clip-text text-transparent;
+  }
+  
+  /* Animation Classes - Fixed to stay visible */
+  .fade-in-up {
+    @apply opacity-0 translate-y-8;
+  }
+  
+  .fade-in-up.animate-in {
+    @apply opacity-100 translate-y-0;
+    transition: all 0.6s ease-out;
+  }
+  
+  .fade-in {
+    @apply opacity-0;
+  }
+  
+  .fade-in.animate-in {
+    @apply opacity-100;
+    transition: opacity 0.8s ease-out;
+  }
+  
+  .slide-in-left {
+    @apply opacity-0 -translate-x-8;
+  }
+  
+  .slide-in-left.animate-in {
+    @apply opacity-100 translate-x-0;
+    transition: all 0.6s ease-out;
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .shadow-intense {
+    box-shadow: var(--shadow-intense);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+  
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+}
+
+/* Keyframes */
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes loading-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loading-fade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.loading-fade-in {
+  animation: loading-fade-in 1s ease-out forwards;
+}
+
+.loading-fade-out {
+  animation: loading-fade-out 1s ease-out forwards;
+}
+
+/* Scroll Animation Classes */
+.animate-in {
+  animation-play-state: running;
+}
