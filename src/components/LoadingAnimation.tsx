@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import DecryptedText from './ui/DecryptedText';
 interface LoadingAnimationProps {
   onComplete: () => void;
 }
@@ -33,19 +33,29 @@ export const LoadingAnimation = ({ onComplete }: LoadingAnimationProps) => {
 
   return (
     <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
-      <div className="text-center">
-        <h1 
-          className={`text-5xl md:text-7xl font-bold mb-4 transition-all duration-1000 ${
+      <div className="text-center md:flex md:items-center md:flex-row md:gap-6">
+        
+        <DecryptedText
+          text="Javier Gomez"
+          animateOn="view"
+          revealDirection="start"
+          speed={50}
+          maxIterations={15}
+          className={`text-5xl md:text-5xl font-bold  text-gradient from-[#2ABD85] to-[#2AACBD] transition-all duration-1000 ${
             isVisible && !isExiting 
               ? 'opacity-100 translate-y-0 loading-fade-in' 
               : isExiting 
                 ? 'opacity-0 -translate-y-5 loading-fade-out'
                 : 'opacity-0 translate-y-5'
           }`}
-        >
-          <span className="text-gradient">Javier Gomez</span>
-        </h1>
-        <p 
+        />
+        <div className="mt-3">
+          <DecryptedText
+          text="Portfolio"
+          animateOn="view"
+          revealDirection="start"
+          speed={60}
+          maxIterations={15}
           className={`text-xl md:text-2xl text-muted-foreground transition-all duration-1000 delay-300 ${
             isVisible && !isExiting 
               ? 'opacity-100 translate-y-0 loading-fade-in' 
@@ -53,9 +63,9 @@ export const LoadingAnimation = ({ onComplete }: LoadingAnimationProps) => {
                 ? 'opacity-0 -translate-y-5 loading-fade-out'
                 : 'opacity-0 translate-y-5'
           }`}
-        >
-          Portfolio
-        </p>
+        />
+        </div>
+        
       </div>
     </div>
   );
