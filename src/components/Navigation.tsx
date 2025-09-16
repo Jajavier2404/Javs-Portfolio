@@ -44,7 +44,7 @@ export const Navigation = () => {
             onClick={() => scrollToSection('inicio')}
             className="text-xl font-bold text-gradient hover:scale-105 transition-transform"
           >
-            KY
+            JAVS
           </button>
 
           {/* Desktop Navigation */}
