@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import Index from "@/pages/Index";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import FloatingParticles from "@/components/FloatingParticles";
+import { ProjectsCatalog } from "@/pages/ProjectsCatalog";
+import { useAuth } from "@/hooks/useAuth";
 import { AdminViewProvider } from "@/context/AdminViewContext";
 import { AdminActionsProvider } from "@/context/AdminActionsContext";
 
-const Admin = () => {
+const AdminProjects = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -19,9 +22,17 @@ const Admin = () => {
   return (
     <AdminViewProvider>
       <AdminActionsProvider>
-        <Index />
+        <div className="relative min-h-screen bg-background neon-grid-bg">
+          <FloatingParticles />
+          <Navbar />
+          <main className="relative z-10">
+            <ProjectsCatalog adminMode />
+          </main>
+          <Footer />
+        </div>
       </AdminActionsProvider>
     </AdminViewProvider>
   );
 };
-export default Admin;
+
+export default AdminProjects;

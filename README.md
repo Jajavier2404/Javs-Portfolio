@@ -59,6 +59,37 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Express (API)
+- Postgres + Prisma
+
+## Backend + Prisma
+
+1) Configure env:
+   - `server/.env` for API
+   - `.env` for Prisma (DATABASE_URL)
+   - Add `GITHUB_TOKEN` in `server/.env` to list repos
+
+2) Generate Prisma client:
+```
+npx prisma generate
+```
+
+3) If your database already exists and has data, do NOT reset. Just run:
+```
+npx prisma db pull
+```
+
+4) Run API:
+```
+npm run dev:server
+```
+
+## DB migration (new project fields)
+
+Run once after pulling changes:
+```
+psql -U postgres -h localhost -d Portfolio -f server/db/002_projects_github_modal.sql
+```
 
 ## How can I deploy this project?
 

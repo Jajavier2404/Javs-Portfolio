@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("users")
+}
+
+model Profile {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String   @default("")
+  role      String   @default("")
+  bio       String   @default("")
+  email     String   @default("")
+  github    String   @default("")
+  linkedin  String   @default("")
+  twitter   String   @default("")
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  @@map("profile")
+}
+
+model Education {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  school    String   @default("")
+  degree    String   @default("")
+  dates     String   @default("")
+  notes     String?
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("education")
+}
+
+model Experience {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  company    String   @default("")
+  role       String   @default("")
+  dates      String   @default("")
+  highlights String[] @default([])
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("experience")
+}
+
+model Project {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String   @default("")
+  description     String   @default("")
+  techStack       String[] @default([]) @map("tech_stack")
+  githubUrl       String   @default("") @map("github_url")
+  liveUrl         String?  @map("live_url")
+  imageUrl        String?  @map("image_url")
+  sortOrder       Int      @default(0) @map("sort_order")
+  githubOwner     String?  @map("github_owner")
+  githubRepo      String?  @map("github_repo")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  featured        Boolean  @default(false) @map("featured")
+  homeOrder       Int      @default(0) @map("home_order")
+  longDescription String?  @map("long_description")
+  highlights      String[] @default([]) @map("highlights")
+
+  @@map("projects")
+}
+
+model HomeGithubRepo {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  githubOwner String   @map("github_owner")
+  githubRepo  String   @map("github_repo")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([githubOwner, githubRepo])
+  @@index([sortOrder])
+  @@map("home_github_repos")
+}

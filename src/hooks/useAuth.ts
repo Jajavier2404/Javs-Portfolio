@@ -1,38 +1,39 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import { apiFetch } from "@/lib/api";
+
+export interface AuthUser {
+  id: string;
+  username: string;
+}
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    apiFetch<{ user: AuthUser | null }>("/auth/me")
+      .then((data) => setUser(data.user))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error };
-  };
-
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
-    return { error };
+  const signIn = async (username: string, password: string) => {
+    try {
+      const data = await apiFetch<{ user: AuthUser }>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
+      setUser(data.user);
+      return { error: null };
+    } catch (error) {
+      return { error: error as Error };
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await apiFetch("/auth/logout", { method: "POST" });
+    setUser(null);
   };
 
-  return { user, loading, signIn, signUp, signOut };
+  return { user, loading, signIn, signOut };
 };

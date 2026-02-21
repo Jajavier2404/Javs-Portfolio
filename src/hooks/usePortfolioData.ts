@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { apiFetch } from "@/lib/api";
 
 export interface ProfileData {
   id: string;
@@ -18,7 +18,7 @@ export interface EducationItem {
   degree: string;
   dates: string;
   notes: string | null;
-  sort_order: number;
+  sortOrder: number;
 }
 
 export interface ExperienceItem {
@@ -27,26 +27,38 @@ export interface ExperienceItem {
   role: string;
   dates: string;
   highlights: string[];
-  sort_order: number;
+  sortOrder: number;
 }
 
 export interface ProjectItem {
   id: string;
   name: string;
   description: string;
-  tech_stack: string[];
-  github_url: string;
-  live_url: string | null;
-  sort_order: number;
+  techStack: string[];
+  githubUrl: string;
+  liveUrl: string | null;
+  imageUrl: string | null;
+  githubOwner: string | null;
+  githubRepo: string | null;
+  sortOrder: number;
+  featured: boolean;
+  homeOrder: number;
+  longDescription: string | null;
+  highlights: string[];
+}
+
+export interface HomeGithubRepoSelection {
+  id: string;
+  githubOwner: string;
+  githubRepo: string;
+  sortOrder: number;
 }
 
 export const useProfile = () =>
   useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("profile").select("*").limit(1).single();
-      if (error) throw error;
-      return data as ProfileData;
+      return apiFetch<ProfileData>("/profile");
     },
   });
 
@@ -54,9 +66,7 @@ export const useEducation = () =>
   useQuery({
     queryKey: ["education"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("education").select("*").order("sort_order");
-      if (error) throw error;
-      return data as EducationItem[];
+      return apiFetch<EducationItem[]>("/education");
     },
   });
 
@@ -64,9 +74,7 @@ export const useExperience = () =>
   useQuery({
     queryKey: ["experience"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("experience").select("*").order("sort_order");
-      if (error) throw error;
-      return data as ExperienceItem[];
+      return apiFetch<ExperienceItem[]>("/experience");
     },
   });
 
@@ -74,8 +82,23 @@ export const useProjects = () =>
   useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("projects").select("*").order("sort_order");
-      if (error) throw error;
-      return data as ProjectItem[];
+      return apiFetch<ProjectItem[]>("/projects");
     },
+  });
+
+export const useHomeGithubRepos = () =>
+  useQuery({
+    queryKey: ["home-github-repos"],
+    queryFn: async () => {
+      return apiFetch<ProjectItem[]>("/home-github-repos");
+    },
+  });
+
+export const useAdminHomeGithubRepos = (enabled = true) =>
+  useQuery({
+    queryKey: ["admin-home-github-repos"],
+    queryFn: async () => {
+      return apiFetch<HomeGithubRepoSelection[]>("/admin/home-github-repos");
+    },
+    enabled,
   });
